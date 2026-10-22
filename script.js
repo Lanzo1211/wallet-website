@@ -4,7 +4,7 @@ let transactions = [
   {
     id: 1,
     title: "Transfer to Abebe",
-    phone: "+251923456789",
+    phone: "+251900000060",
     type: "out",
     amount: 500.00,
     time: "Today, 11:20 AM"
@@ -12,7 +12,7 @@ let transactions = [
   {
     id: 2,
     title: "Received from Dr alemu",
-    phone: "+2519000002",
+    phone: "+251900000002",
     type: "in",
     amount: 2500.00,
     time: "Yesterday"
