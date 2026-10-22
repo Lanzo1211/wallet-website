@@ -1,8 +1,7 @@
 :root {
-  /* Telebirr Inspired Palette */
-  --tb-primary: #0077c8;       /* Ethio telecom blue */
+  --tb-primary: #0077c8;       
   --tb-primary-dark: #005691;
-  --tb-accent: #78be20;        /* Telebirr vivid lime green */
+  --tb-accent: #78be20;        
   --tb-accent-hover: #67a61b;
   --tb-dark: #1e293b;
   --tb-light: #f8fafc;
