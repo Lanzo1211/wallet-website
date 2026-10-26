@@ -2,7 +2,6 @@ function changePage(path) {
     
       window.history.pushState({}, '', path);
 
-      // 2. CHANGE THE CONTENT ON THE SCREEN MANUALLY
       const contentDiv = document.getElementById('content');
       
       if (path === '/') {
@@ -14,8 +13,7 @@ function changePage(path) {
       }
     }
 
-    // 3. HANDLE BACK / FORWARD BUTTONS
     window.addEventListener('popstate', () => {
-      // When the user clicks the browser's back button, sync the page content with the current URL
+
       changePage(window.location.pathname);
     });
