@@ -3,12 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Routes with History API</title>
+  <title>welcome</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 30px; background: #f4f4f9; }
-    nav { background: #2c3e50; padding: 15px; border-radius: 6px; }
-    nav a { color: #fff; text-decoration: none; margin-right: 20px; font-weight: bold; }
-    main { margin-top: 20px; background: #fff; padding: 25px; border-radius: 6px; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 30px;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    nav {
+      background: #2c3e50;
+      padding: 15px;
+      border-radius: 6px;
+    }
+    nav a {
+      color: #ecf0f1;
+      text-decoration: none;
+      margin-right: 20px;
+      font-weight: bold;
+    }
+    nav a:hover {
+      color: #3498db;
+    }
+    .content-container {
+      margin-top: 20px;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border-left: 5px solid #3498db;
+    }
   </style>
 </head>
 <body>
@@ -16,62 +41,59 @@
   <nav>
     <a href="/" data-link>Home</a>
     <a href="/about" data-link>About</a>
-    <a href="/about/comment/42" data-link>Comment #42</a>
-    <a href="/about/comment/99" data-link>Comment #99</a>
+    <a href="/contact" data-link>Contact</a>
   </nav>
-
   <main id="app">
-    <!-- Dynamic view renders here -->
+
   </main>
 
   <script>
+    const routes = {
+      "/": `
+        <div class="content-container">
+          <h2>Welcome Home</h2>
+          <p>This is the main landing page, loaded seamlessly using the JavaScript History API.</p>
+        </div>
+      `,
+      "/about": `
+        <div class="content-container">
+          <h2>About Us</h2>
+          <p>When you click About, this container loads instantly without a full page refresh!</p>
+        </div>
+      `,
+      "/contact": `
+        <div class="content-container">
+          <h2>Contact Us</h2>
+          <p>Get in touch with us using this contact view container.</p>
+        </div>
+      `
+    };
+
+
     function navigateTo(url) {
       history.pushState(null, null, url);
       router();
     }
-
     function router() {
-      let path = window.location.pathname;
+      const path = window.location.pathname;
       const appContainer = document.getElementById("app");
-
-      // 1. Check for static routes
-      if (path === "/") {
-        appContainer.innerHTML = "<h2>Home Page</h2><p>Welcome!</p>";
-        return;
-      }
-      if (path === "/about") {
-        appContainer.innerHTML = "<h2>About Us</h2><p>Learn more about us.</p>";
-        return;
-      }
-
-      // 2. Check for dynamic routes starting with /about/comment/
-      if (path.startsWith("/about/comment/")) {
-        // Extract everything after "/about/comment/"
-        const commentId = path.split("/")[3]; 
-        
-        appContainer.innerHTML = `
-          <h2>Comment Detail Page</h2>
-          <p>You are viewing details for Comment ID: <strong>${commentId}</strong></p>
-        `;
-        return;
-      }
-
-      // 3. Fallback 404
-      appContainer.innerHTML = "<h2>404 Error</h2><p>Page not found.</p>";
+      
+      appContainer.innerHTML = routes[path] || `
+        <div class="content-container" style="border-left-color: #e74c3c;">
+          <h2>404 Error</h2>
+          <p>Page not found.</p>
+        </div>
+      `;
     }
 
-    // Intercept link clicks
     document.addEventListener("click", (e) => {
       if (e.target.matches("[data-link]")) {
         e.preventDefault();
         navigateTo(e.target.getAttribute("href"));
       }
     });
-
-    // Listen for back/forward buttons
     window.addEventListener("popstate", router);
 
-    // Load initial route
     window.addEventListener("DOMContentLoaded", router);
   </script>
 
