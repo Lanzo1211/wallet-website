@@ -1,21 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-    <link rel="stylesheet" href="style2.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Routes with History API</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; background: #f4f4f9; }
+    nav { background: #2c3e50; padding: 15px; border-radius: 6px; }
+    nav a { color: #fff; text-decoration: none; margin-right: 20px; font-weight: bold; }
+    main { margin-top: 20px; background: #fff; padding: 25px; border-radius: 6px; }
+  </style>
 </head>
 <body>
-<nav>
-  <a href="/home"  data-path="/">Home</a> |
-  <a href="/about" data-path="/about">About</a> |
-  <a href="/contact"  data-path="/contact">Contact</a>
-</nav>
 
-<div id="app">
-  <h1>Welcome Home!</h1>
-</div>
+  <nav>
+    <a href="/" data-link>Home</a>
+    <a href="/about" data-link>About</a>
+    <a href="/about/comment/42" data-link>Comment #42</a>
+    <a href="/about/comment/99" data-link>Comment #99</a>
+  </nav>
+
+  <main id="app">
+    <!-- Dynamic view renders here -->
+  </main>
+
+  <script>
+    function navigateTo(url) {
+      history.pushState(null, null, url);
+      router();
+    }
+
+    function router() {
+      let path = window.location.pathname;
+      const appContainer = document.getElementById("app");
+
+      // 1. Check for static routes
+      if (path === "/") {
+        appContainer.innerHTML = "<h2>Home Page</h2><p>Welcome!</p>";
+        return;
+      }
+      if (path === "/about") {
+        appContainer.innerHTML = "<h2>About Us</h2><p>Learn more about us.</p>";
+        return;
+      }
+
+      // 2. Check for dynamic routes starting with /about/comment/
+      if (path.startsWith("/about/comment/")) {
+        // Extract everything after "/about/comment/"
+        const commentId = path.split("/")[3]; 
+        
+        appContainer.innerHTML = `
+          <h2>Comment Detail Page</h2>
+          <p>You are viewing details for Comment ID: <strong>${commentId}</strong></p>
+        `;
+        return;
+      }
+
+      // 3. Fallback 404
+      appContainer.innerHTML = "<h2>404 Error</h2><p>Page not found.</p>";
+    }
+
+    // Intercept link clicks
+    document.addEventListener("click", (e) => {
+      if (e.target.matches("[data-link]")) {
+        e.preventDefault();
+        navigateTo(e.target.getAttribute("href"));
+      }
+    });
+
+    // Listen for back/forward buttons
+    window.addEventListener("popstate", router);
+
+    // Load initial route
+    window.addEventListener("DOMContentLoaded", router);
+  </script>
 
 </body>
 </html>
